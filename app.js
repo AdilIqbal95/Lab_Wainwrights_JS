@@ -1,54 +1,71 @@
+const filterContainer = document.querySelector("#filterContainer")
 const wainwrightsContainer = document.querySelector("#wainwrightsContainer")
 const wainwrightsList = document.querySelector("#wainwrights-list")
+let wainwrightData;
 
 const getAllWainWrights = async () => {
     const response = await fetch('https://raw.githubusercontent.com/annahndr/annahndr.github.io/master/wainwrights_data/wainwrights.json');
     const data = await response.json();
     
-    data.forEach(element => {
-        displayData(element);
-    });
-
-    // Add form
-     
-
-    // console.log();
-    return data;
+    wainwrightData = data;
 }
-
-getAllWainWrights()
-console.log();
-
+getAllWainWrights();
 
 // Create form
 const filterFormElement = document.createElement("form");
 filterFormElement.id = "filter-form"
 filterFormElement.setAttribute("method", "get");
-wainwrightsContainer.appendChild(filterFormElement);
+filterContainer.appendChild(filterFormElement);
 const filterForm = document.querySelector("#filter-form");
 
 const filterFormInput = document.createElement("input");
 filterFormInput.setAttribute("type", "text");
 filterFormInput.setAttribute("name", "search");
 filterFormInput.setAttribute("placeholder", "Enter search term...");
+filterFormInput.id = "filter-form-search-bar"
 
 const filterFormSubmitBtn = document.createElement("input");
 filterFormSubmitBtn.setAttribute("type", "submit");
 filterFormSubmitBtn.setAttribute("value", "Search");
-// filterFormSubmitBtn.innerText = "Search"
 
 filterForm.appendChild(filterFormInput)
 filterForm.appendChild(filterFormSubmitBtn)
 
 
+// Filtering
+filterForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const searchInput = event.target["filter-form-search-bar"].value.toLowerCase();
+    filterForm.reset()
+    if (searchInput == "") {
+        displayData(wainwrightData)
+    } else {
+        const filteredData = wainwrightData.filter(item => item.name.toLowerCase().includes(searchInput));
+        filterResults(searchInput);
+    }
 
+    
+})
 
+const filterResults = (searchInput) => {
+    let filteredDataArr = []
+    wainwrightData.forEach(element => {
+        if (element.name.toLowerCase().includes(searchInput)) {
+            filteredDataArr.push(element)
+        }
+    })
+    displayData(filteredDataArr)
+}
 
-
-
-const displayData = (element) => {
+// Display data
+const displayData = (data) => {
+    
+    if(wainwrightsList) {
+        wainwrightsList.textContent = ''
+    }
+    data.forEach(element => {
+    
     const nameNoSpace = element.name.replace(/\s+/g,'-').toLowerCase(); // replace spaces with '-'
-
     // Create elements
     const hillName = document.createElement("h2");
     hillName.textContent = element.name;
@@ -83,6 +100,7 @@ const displayData = (element) => {
     about.id = nameNoSpace + "-about";
     
     // Append the elements
+
     wainwrightsList.appendChild(hillName);
     wainwrightsList.appendChild(hillHeightMetres);
     wainwrightsList.appendChild(hillHeightFeet);
@@ -91,6 +109,8 @@ const displayData = (element) => {
     wainwrightsList.appendChild(areaName);
     wainwrightsList.appendChild(localTowns);
     wainwrightsList.appendChild(about);
+    })
+
 }
 
 
