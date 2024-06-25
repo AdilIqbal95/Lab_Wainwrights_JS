@@ -1,14 +1,16 @@
 const wainwrightsContainer = document.querySelector("#wainwrightsContainer")
 const wainwrightsList = document.querySelector("#wainwrights-list")
-let data;
+
 const getAllWainWrights = async () => {
     const response = await fetch('https://raw.githubusercontent.com/annahndr/annahndr.github.io/master/wainwrights_data/wainwrights.json');
-    data = await response.json();
-    
+    const data = await response.json();
     
     data.forEach(element => {
         displayData(element);
     });
+
+    // Add form
+     
 
     // console.log();
     return data;
@@ -16,6 +18,34 @@ const getAllWainWrights = async () => {
 
 getAllWainWrights()
 console.log();
+
+
+// Create form
+const filterFormElement = document.createElement("form");
+filterFormElement.id = "filter-form"
+filterFormElement.setAttribute("method", "get");
+wainwrightsContainer.appendChild(filterFormElement);
+const filterForm = document.querySelector("#filter-form");
+
+const filterFormInput = document.createElement("input");
+filterFormInput.setAttribute("type", "text");
+filterFormInput.setAttribute("name", "search");
+filterFormInput.setAttribute("placeholder", "Enter search term...");
+
+const filterFormSubmitBtn = document.createElement("input");
+filterFormSubmitBtn.setAttribute("type", "submit");
+filterFormSubmitBtn.setAttribute("value", "Search");
+// filterFormSubmitBtn.innerText = "Search"
+
+filterForm.appendChild(filterFormInput)
+filterForm.appendChild(filterFormSubmitBtn)
+
+
+
+
+
+
+
 const displayData = (element) => {
     const nameNoSpace = element.name.replace(/\s+/g,'-').toLowerCase(); // replace spaces with '-'
 
@@ -62,9 +92,5 @@ const displayData = (element) => {
     wainwrightsList.appendChild(localTowns);
     wainwrightsList.appendChild(about);
 }
-
-// To be displayed
-// name -> area (not inclusive of area)
-// 
 
 
