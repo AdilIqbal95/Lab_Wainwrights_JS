@@ -4,10 +4,20 @@ const wainwrightsList = document.querySelector("#wainwrights-list")
 let wainwrightData;
 
 const getAllWainWrights = async () => {
-    const response = await fetch('https://raw.githubusercontent.com/annahndr/annahndr.github.io/master/wainwrights_data/wainwrights.json');
-    const data = await response.json();
+    try {
+        const response = await fetch('https://raw.githubusercontent.com/annahndr/annahndr.github.io/master/wainwrights_data/wainwrights.json');
+        const data = await response.json();
+        
+        wainwrightData = data;
+        displayData(data)    
+    } catch (error) {
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = `Unable to load data: ${error}`;
+        errorMessage.id = "error-message";
+        wainwrightsContainer.appendChild(errorMessage);
+        // console.log(error);
+    }
     
-    wainwrightData = data;
 }
 getAllWainWrights();
 
@@ -60,9 +70,8 @@ const filterResults = (searchInput) => {
 // Display data
 const displayData = (data) => {
     
-    if(wainwrightsList) {
-        wainwrightsList.textContent = ''
-    }
+    wainwrightsList.textContent = ''
+
     data.forEach(element => {
     
     const nameNoSpace = element.name.replace(/\s+/g,'-').toLowerCase(); // replace spaces with '-'
