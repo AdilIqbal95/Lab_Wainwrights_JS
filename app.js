@@ -15,7 +15,6 @@ const getAllWainWrights = async () => {
         errorMessage.textContent = `Unable to load data: ${error}`;
         errorMessage.id = "error-message";
         wainwrightsContainer.appendChild(errorMessage);
-        // console.log(error);
     }
     
 }
