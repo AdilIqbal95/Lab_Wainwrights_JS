@@ -45,7 +45,6 @@ filterForm.appendChild(filterFormSubmitBtn)
 filterForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const searchInput = event.target["filter-form-search-bar"].value.toLowerCase();
-    filterForm.reset()
     if (searchInput == "") {
         displayData(wainwrightData)
     } else {
